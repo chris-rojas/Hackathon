@@ -1,12 +1,11 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from pptx import Presentation
-from pptx.util import Inches
-import os
+from page_modules.utilities import save_content_to_ppt
 
 
 # Sample data for financials and geographic distribution
+####
 data = {
     "Region": ["North America", "Europe", "Asia"],
     "Revenue": [120000, 85000, 100000],
@@ -25,32 +24,7 @@ def create_bar_chart():
     plt.savefig(fig_path)  # Save the chart as an image file
     plt.close(fig)
     return fig_path
-
-# Function to save content to a PowerPoint file
-def save_content_to_ppt(content, chart_path, filename="result/Profiler_Report.pptx"):
-    # Ensure the result directory exists
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    
-    # Create a PowerPoint presentation
-    prs = Presentation()
-    
-    for title, text in content.items():
-        # Add a slide for each section
-        slide = prs.slides.add_slide(prs.slide_layouts[1])
-        title_placeholder = slide.shapes.title
-        content_placeholder = slide.placeholders[1]
-
-        # Set the title and content
-        title_placeholder.text = title
-        content_placeholder.text = text
-
-        # Add the chart to the Financials slide
-        if title == "Financials" and os.path.exists(chart_path):
-            slide.shapes.add_picture(chart_path, Inches(1), Inches(2), width=Inches(4))
-
-    # Save the presentation
-    prs.save(filename)
-
+####
 
 def show_profiler():
     # Load custom CSS
@@ -95,10 +69,3 @@ def show_profiler():
     # Button to generate and download the PowerPoint file
     if st.button("Download PPT"):
         save_content_to_ppt(content, chart_path)  # Save the content to a PowerPoint file
-#         with open("result/Profiler_Report.pptx", "rb") as file:
-#             btn = st.download_button(
-#                 label="Download PowerPoint",
-#                 data=file,
-#                 file_name="Profiler_Report.pptx",
-#                 mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-#             )

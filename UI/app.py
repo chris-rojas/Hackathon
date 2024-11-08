@@ -6,32 +6,43 @@ from page_modules.overview import show_overview  # Import the Overview function
 
 import pandas as pd
 
-# Set page configuration
-st.set_page_config(page_title="Company Analysis Dashboard", layout="wide")
-
-# Sidebar layout for "Company/ Ticker" input and file uploader
+# Sidebar layout for "Company/ Ticker" input and Start button
 st.sidebar.markdown("### Company/ Ticker")
 company_ticker = st.sidebar.text_input("Enter Company/Ticker", key="company_ticker")
 
+# Start button below the company ticker input
+if st.sidebar.button("Start"):
+    st.session_state["started"] = True
+
+# Initialize session state for "started" if not already set
+if "started" not in st.session_state:
+    st.session_state["started"] = False
+    
 # Navigation using st.radio for persistent state
 st.sidebar.markdown("## Navigation")
-page = st.sidebar.radio("Go to", ["Overview", "Profiler", "Chat Bot", "Valuation"])
+page = st.sidebar.radio("Go to", ["Profiler", "Chat Bot", "Valuation"])
 
-# Set the selected page in session state for tracking
-st.session_state["page"] = page
+# Only display the content if "Start" button has been clicked
+if st.session_state["started"]:
 
-#st.markdown('<div class="main-content">', unsafe_allow_html=True)
-# Display the selected page content
-if st.session_state["page"] == "Overview":
+    # Set the selected page in session state for tracking
+    st.session_state["page"] = page
+
+    #st.markdown('<div class="main-content">', unsafe_allow_html=True)
+    # Display the selected page content
+    if st.session_state["page"] == "Profiler":
+        show_profiler()
+    elif st.session_state["page"] == "Chat Bot":
+        show_chat_bot()
+    elif st.session_state["page"] == "Valuation":
+        show_valuation()
+    #st.markdown('</div>', unsafe_allow_html=True)
+
+else:
+    # Display a message prompting the user to click the Start button
+    st.write("Please enter a Company/Ticker and click the Start button to begin.")
     show_overview()
-elif st.session_state["page"] == "Profiler":
-    show_profiler()
-elif st.session_state["page"] == "Chat Bot":
-    show_chat_bot()
-elif st.session_state["page"] == "Valuation":
-    show_valuation()
-#st.markdown('</div>', unsafe_allow_html=True)
-
+    
 # File uploader in the sidebar
 st.sidebar.markdown("### Upload a File")
 uploaded_file = st.sidebar.file_uploader("Choose a file", type=["csv", "xlsx", "pdf"], key="file_uploader")

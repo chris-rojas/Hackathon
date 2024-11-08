@@ -1,4 +1,5 @@
 import streamlit as st
+from page_modules.utilities import save_content_to_ppt
 
 def show_valuation():
     # Load custom CSS
@@ -19,10 +20,3 @@ def show_valuation():
     ## Button to generate and download the PowerPoint file
     if st.button("Download PPT"):
         save_content_to_ppt(content, chart_path)  # Save the content to a PowerPoint file
-#         with open("result/Profiler_Report.pptx", "rb") as file:
-#             btn = st.download_button(
-#                 label="Download PowerPoint",
-#                 data=file,
-#                 file_name="Profiler_Report.pptx",
-#                 mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-#             )
