@@ -24,7 +24,7 @@ def create_bar_chart():
     return fig_path
 ####
 
-def show_profiler():
+def show_profiler(result):
     # Load custom CSS
     with open("style.css") as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
@@ -34,8 +34,8 @@ def show_profiler():
 
     # Collect content for each tab
     with profiler_tabs[0]:
-        overview_str = "This is the company overview with a sample paragraph.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec nisl vel mauris blandit interdum."
-        
+        # overview_str = "This is the company overview with a sample paragraph.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent nec nisl vel mauris blandit interdum."
+        overview_str = result['overview']
         st.write("### Overview")
         st.write(overview_str)
         agree = st.checkbox("Add Overview to presentation",
@@ -75,10 +75,11 @@ def show_profiler():
         st.session_state["Management Information"] = management_str if agree else False
 
     with profiler_tabs[4]:
-        recent_news_str = "1. Company launches new product.\n2. Q3 earnings report shows positive growth.\n3. Expansion into new markets."
+        # news_str = "1. Company launches new product.\n2. Q3 earnings report shows positive growth.\n3. Expansion into new markets."
+        news_str = result['news']
         st.write("### Recent News")
-        st.write(recent_news_str)
+        st.write(news_str)
         agree = st.checkbox("Add Recent News to presentation",
                             value=st.session_state.get('Recent News', False))
 
-        st.session_state["Recent News"] = recent_news_str if agree else False
+        st.session_state["Recent News"] = news_str if agree else False
