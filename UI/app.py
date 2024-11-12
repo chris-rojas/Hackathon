@@ -2,7 +2,8 @@ import streamlit as st
 from page_modules.profiler import show_profiler
 from page_modules.chat_bot import show_chat_bot
 from page_modules.valuation import show_valuation
-from page_modules.overview import show_overview  # Import the Overview function
+from page_modules.Introduction import show_overview  # Import the Overview function
+from page_modules.utilities import save_content_to_ppt
 
 import pandas as pd
 
@@ -31,12 +32,22 @@ if st.session_state["started"]:
     #st.markdown('<div class="main-content">', unsafe_allow_html=True)
     # Display the selected page content
     if st.session_state["page"] == "Profiler":
-        show_profiler()
+        show_profiler() 
     elif st.session_state["page"] == "Chat Bot":
         show_chat_bot()
     elif st.session_state["page"] == "Valuation":
         show_valuation()
     #st.markdown('</div>', unsafe_allow_html=True)
+
+    # Display slides which will be included in presentation
+    possible_slides = ["Overview", "Financials", "Geographic Mix", "Management Information",
+                       "Recent News", "Discounted Cash Flow Analysis", "Leveraged Buyout Analysis"]
+    for title in possible_slides:
+        if st.session_state.get(title, False):
+            st.sidebar.markdown(title + " Slide")
+    # Download presentation
+    if st.sidebar.button("Download PPT", key=page):
+        save_content_to_ppt()
 
 else:
     # Display a message prompting the user to click the Start button
